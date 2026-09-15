@@ -3,7 +3,7 @@
 **Original fictional training fixture.** Teams-style text, not a real Teams
 export. Speaker: Mira Solen, Caldova Document Coordinator.
 
-**Public source:** https://github.com/DevExpGbb/caldova-pharma-workshop/blob/main/fixtures/teams-request.md
+**Public source:** https://github.com/DevExpGbb/caldova-pharma-workshop/blob/4155400f92b7fc146fc6fb6047811bcacf33158a/fixtures/teams-request.md
 
 > I keep reading the whole document board just to find the items marked
 > “Needs review.” Could we have a simple way to show those items, with a count

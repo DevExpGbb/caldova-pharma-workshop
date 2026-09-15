@@ -3,7 +3,7 @@
 **Original fictional training fixture.** Message-style text from Leni Varo,
 Caldova Training Host.
 
-**Public source:** https://github.com/DevExpGbb/caldova-pharma-workshop/blob/main/fixtures/ambiguous-request.md
+**Public source:** https://github.com/DevExpGbb/caldova-pharma-workshop/blob/4155400f92b7fc146fc6fb6047811bcacf33158a/fixtures/ambiguous-request.md
 
 > Before the next training session, could the board show the urgent documents
 > first? I have not decided what should count as urgent or who should choose

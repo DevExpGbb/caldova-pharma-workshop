@@ -3,7 +3,7 @@
 **Original fictional training fixture.** Email-style text, not a real email.
 From: Theo Marin, Caldova Lab Support. Subject: Document board view.
 
-**Public source:** https://github.com/DevExpGbb/caldova-pharma-workshop/blob/main/fixtures/email-request.md
+**Public source:** https://github.com/DevExpGbb/caldova-pharma-workshop/blob/4155400f92b7fc146fc6fb6047811bcacf33158a/fixtures/email-request.md
 
 > Mira mentioned a view that lets us focus on documents labeled “Needs review.”
 > That would save me scanning the whole board. I would also like to see how many
