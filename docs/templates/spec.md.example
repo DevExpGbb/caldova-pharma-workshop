@@ -1,0 +1,35 @@
+# <Short feature specification>
+
+## Issue and agreed plan
+
+- Issue: <YOUR_ISSUE_URL>
+- Plan file/revision:
+
+## Outcome
+
+<!-- One sentence, in your own words. -->
+
+## Behavior
+
+<!-- Describe what a person sees and does, including unresolved choices. -->
+
+## Files
+
+<!-- List actual inspected files expected to change, with a reason for each. -->
+
+## Tests and evidence
+
+<!-- Map each behavior to a test or a concrete manual observation. -->
+
+## Negative case
+
+<!-- Name something this change must not do and how you will verify that. -->
+
+## Out of scope
+
+<!-- Name exclusions and when to stop and ask. -->
+
+## Human approval
+
+<!-- Leave pending until a person approves this exact spec revision.
+     A generated “approved” sentence is not approval. -->

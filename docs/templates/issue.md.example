@@ -1,0 +1,30 @@
+# <Your short, outcome-focused title>
+
+## Source and public-safe evidence
+
+- Fictional source ID:
+- Public fixture permalink:
+- Short exact quotation, checked against the public fixture:
+- Input mode: live WorkIQ / offline fixture practice
+- If live: native citation retained privately; not copied into this public issue.
+
+## Requested outcome
+
+<!-- Describe the user's need in your own words. Do not write the implementation. -->
+
+## Acceptance criteria
+
+<!-- Write observable behavior and how a person could check it. -->
+
+## Questions and assumptions
+
+<!-- Separate facts in the message from choices that still need human agreement. -->
+
+## Out of scope
+
+<!-- Keep the change small and nonclinical. -->
+
+## Human confirmation
+
+<!-- Review exact text and destination before creating the issue.
+     Record confirmation only after a human actually gives it. -->

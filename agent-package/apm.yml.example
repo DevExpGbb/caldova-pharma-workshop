@@ -1,0 +1,15 @@
+name: caldova-workshop-skills
+version: "0.1.0"
+description: Three skills authored during the Caldova Pharma workshop
+author: Caldova Pharma workshop contributors
+license: MIT
+dependencies: {}
+devDependencies:
+  apm:
+    - devexpgbb/zava-agent-config/plugins/secure-baseline#931cfb58663154415f8a13e14680f548114d4555
+compilation:
+  source_attribution: true
+includes:
+  - .apm/skills/intake/SKILL.md
+  - .apm/skills/plan-to-spec/SKILL.md
+  - .apm/skills/code-review/SKILL.md

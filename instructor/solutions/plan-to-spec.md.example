@@ -1,0 +1,67 @@
+---
+name: plan-to-spec
+description: >-
+  Use this skill when turning an existing confirmed issue and bounded plan
+  into a short implementation specification, including requests to make an
+  agreed approach actionable. Do not use it for source intake, planning
+  without an existing plan, or implementation.
+---
+
+# Turn an agreed plan into a short specification
+
+Target: GitHub Copilot App with repository file and GitHub issue tools.
+
+## Procedure
+
+1. Read the actual issue and the bounded plan named by the user. Do not
+   substitute conversation memory for either artifact. If one is unavailable
+   or the issue is not confirmed, explain what is missing and stop.
+2. Re-read the outcome, exclusions, unresolved questions, and human decisions.
+   A plan is a proposed approach; a specification records the behavior someone
+   can build and check. Do not silently expand the agreed scope.
+3. Inspect the relevant files in this exact checkout. Distinguish files that
+   already exist from proposed new files. Do not inspect instructor answers.
+4. Turn the plan into the compact shape below. Map every criterion to evidence
+   that could actually establish it. Include a negative case: something the
+   change must not alter. Keep unanswered questions explicit.
+5. If the plan introduces a backend, sign-in, storage, remote data, approval
+   actions, or another feature into this local workshop, call out the conflict.
+   Do not normalize a scope change into the specification.
+6. Show the specification to the human. Save it only at the requested path
+   using file tools, and read the saved version back. Link it to the supplied
+   issue only when asked. Ask for explicit agreement before anyone implements;
+   writing a specification does not approve it.
+
+## Specification shape
+
+```markdown
+# Short specification
+
+Issue: actual URL
+Plan: actual saved plan path or link
+Status: proposed / explicitly agreed by the human
+
+## Outcome
+One observable improvement.
+
+## Behavior
+Default, requested interaction, exceptional input, and accessible feedback.
+
+## Files
+Existing observed files and explicitly marked new files.
+
+## Evidence
+Criterion | test or observation that will prove it
+
+## Negative case
+What must not change, and how to check that.
+
+## Out of scope
+Named adjacent work that is not part of the change.
+
+## Open questions
+Anything still preventing agreement, or "None identified."
+```
+
+Do not implement, add tests, create a PR, or treat a proposed spec as approved.
+Missing facts are questions, not permission to invent requirements.

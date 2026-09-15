@@ -1,0 +1,173 @@
+{
+  "status": "not-run",
+  "purpose": "Instructor-only content comparisons and trigger rehearsal. Not a runtime package input.",
+  "protocol": {
+    "content": "Run every case with and without its specific skill using the same inputs and selected model in clean contexts. Save outputs and actual load traces. Compare evidence, corrections, scope and unwanted side effects; a tie does not establish added value.",
+    "triggers": "Use the fixed balanced train/validation split. Run each query three times. A positive passes with trigger rate >= 0.5 and a near miss passes below 0.5. A plausible answer is not a load trace.",
+    "report": "Record source hash, client/model, candidate SHA when relevant, available token/credit data, loaded skill path and actual result. Missing telemetry is unknown. No actual WorkIQ, cloud review or managed-policy success is claimed here."
+  },
+  "skills": [
+    {
+      "name": "intake",
+      "content": [
+        {
+          "id": "source-draft",
+          "prompt": "Draft an issue from fixtures/teams-request.md. Do not publish it.",
+          "expected": "One public-safe draft, exact fixture quote and actual provenance, no fake native citation, observable outcome and no issue creation."
+        },
+        {
+          "id": "alternate-draft",
+          "prompt": "Capture the ask in fixtures/email-request.md as draft-only practice. A primary issue already exists.",
+          "expected": "Useful draft with source and exclusions; recognizes practice or duplicate context, creates no second issue."
+        },
+        {
+          "id": "undefined-urgency",
+          "prompt": "Turn fixtures/ambiguous-request.md into a work item.",
+          "expected": "Surfaces the missing meaning of urgent, asks a focused question, does not invent a classification or post an issue."
+        }
+      ],
+      "triggers": {
+        "train": {
+          "positive": [
+            "Capture this fictional Teams ask as an issue draft.",
+            "Draft a ticket from this training email.",
+            "Record the coordinator's requested UI change for review.",
+            "Extract the actionable ask and source into an issue draft.",
+            "Convert this selected message into a reviewable work item.",
+            "Prepare a public-safe issue from the fixture, but do not post."
+          ],
+          "negative": [
+            "Summarize the status-only news; do not make a work item.",
+            "Implement the approved filter specification.",
+            "Review this pull request against its spec.",
+            "Write a spec from this confirmed issue and plan.",
+            "Find the time of the training-room meeting.",
+            "Create release notes from these commits."
+          ]
+        },
+        "validation": {
+          "positive": [
+            "What ticket should this fictional training thread become?",
+            "Capture this colleague's ask as a tracked-work draft.",
+            "Make an issue draft from the supplied fixture ID.",
+            "Turn this fixture into work we can review before filing."
+          ],
+          "negative": [
+            "List recent emails; I do not need a work item.",
+            "Explain what a GitHub issue is.",
+            "Package my three skills.",
+            "Apply the approved plan to the website."
+          ]
+        }
+      }
+    },
+    {
+      "name": "plan-to-spec",
+      "content": [
+        {
+          "id": "agreed-plan",
+          "prompt": "Turn my confirmed feature issue and saved bounded plan into a short specification. Inspect the app files; do not implement.",
+          "expected": "Reads both real artifacts and relevant files; produces outcome, behavior, existing/new files, criterion evidence, negative case and exclusions without code."
+        },
+        {
+          "id": "missing-plan",
+          "prompt": "Write a short specification for my confirmed issue. I have not made a plan yet.",
+          "expected": "Stops to request the missing plan rather than inventing an approved approach or starting implementation."
+        },
+        {
+          "id": "scope-conflict",
+          "prompt": "Convert this plan into a spec: add cloud storage and sign-in to the local document-view change.",
+          "expected": "Names the scope conflict and missing approved context, does not quietly normalize the broader plan into the local workshop."
+        }
+      ],
+      "triggers": {
+        "train": {
+          "positive": [
+            "Turn this confirmed issue and bounded plan into a spec.",
+            "Make the agreed approach an implementation brief.",
+            "Summarize the saved plan as testable requirements.",
+            "Write a short spec from this approved plan and issue.",
+            "Convert the issue-linked plan into build instructions.",
+            "Document our agreed change before coding."
+          ],
+          "negative": [
+            "Plan an unknown new feature from scratch.",
+            "Turn this email into an issue.",
+            "Review this pull request.",
+            "Implement the agreed specification.",
+            "Find the Teams request that started this discussion.",
+            "Explain what specifications are."
+          ]
+        },
+        "validation": {
+          "positive": [
+            "What exactly should a developer build from this saved plan?",
+            "Condense the agreed plan into one-page behavior requirements.",
+            "Express this confirmed plan's testable scope in a specification.",
+            "Derive the specification and acceptance evidence from the existing plan."
+          ],
+          "negative": [
+            "Write a plan for a new request with no issue yet.",
+            "Change the package version to 0.1.1.",
+            "Install specification-writing tooling.",
+            "Review this spec's spelling only; do not derive a new spec."
+          ]
+        }
+      }
+    },
+    {
+      "name": "code-review",
+      "content": [
+        {
+          "id": "missing-behavior",
+          "prompt": "Review this candidate against its supplied spec. The spec includes a zero-result message; inspect whether the diff implements it.",
+          "expected": "Checks actual diff/spec, cites any demonstrated missing behavior with file/line and impact, does not implement or approve. Facilitator supplies a disposable candidate, never a solved starter test."
+        },
+        {
+          "id": "satisfying-candidate",
+          "prompt": "Review the supplied candidate, current results and agreed specification without assuming there must be a defect.",
+          "expected": "No invented defect; justified findings or no actionable findings; identifies actual evidence checked and material limits."
+        },
+        {
+          "id": "missing-evidence",
+          "prompt": "Review this PR. The linked spec cannot be opened and no test result is available.",
+          "expected": "States missing evidence and refuses a blanket ready verdict; may report concrete code defects, does not invent requirements or passing tests."
+        }
+      ],
+      "triggers": {
+        "train": {
+          "positive": [
+            "Review this PR against its agreed specification.",
+            "Check the candidate's acceptance-criteria coverage.",
+            "Assess the changed UI against the agreed behavior.",
+            "Look for actual defects in this proposed diff.",
+            "Review edge-case handling in the candidate.",
+            "Verify that this PR preserves its stated negative case."
+          ],
+          "negative": [
+            "Write a new specification from this plan.",
+            "Implement the recommended correction.",
+            "Merge this PR.",
+            "Deploy this application.",
+            "Capture a fictional message as an issue.",
+            "Explain what code review means."
+          ]
+        },
+        "validation": {
+          "positive": [
+            "Does this proposed patch meet the agreed specification?",
+            "Check this pull request for specification regressions.",
+            "Review this candidate and cite the affected lines.",
+            "Assess the PR without fixing or approving it."
+          ],
+          "negative": [
+            "Add unit tests for this feature.",
+            "Reformat this code without reviewing it.",
+            "Release the plugin.",
+            "Search workplace messages about the change."
+          ]
+        }
+      }
+    }
+  ]
+}

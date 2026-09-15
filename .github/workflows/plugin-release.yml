@@ -1,0 +1,98 @@
+name: Package learner-authored skills
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: plugin-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+      - name: Require the authored source and matching tag
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          git ls-files --error-unmatch agent-package/apm.yml agent-package/apm.lock.yaml \
+            .github/skills/intake/SKILL.md .github/skills/plan-to-spec/SKILL.md \
+            .github/skills/code-review/SKILL.md
+          node scripts/package.mjs stage "$RELEASE_TAG"
+      - name: Download and verify APM 0.31.0
+        run: |
+          set -euo pipefail
+          mkdir -p .workshop/tools
+          curl --fail --silent --show-error --location \
+            https://github.com/microsoft/apm/releases/download/v0.31.0/apm-linux-x86_64.tar.gz \
+            --output .workshop/tools/apm-linux-x86_64.tar.gz
+          printf '%s  %s\n' \
+            '866d7f2cc095e858e52c4c81e2fc0acb99d1fb1948fe5464165bb362d08e9645' \
+            '.workshop/tools/apm-linux-x86_64.tar.gz' | sha256sum --check -
+          tar -xzf .workshop/tools/apm-linux-x86_64.tar.gz -C .workshop/tools
+          echo "$GITHUB_WORKSPACE/.workshop/tools/apm-linux-x86_64" >> "$GITHUB_PATH"
+      - name: Audit and pack only the staged skills
+        working-directory: .workshop/package
+        run: |
+          set -euo pipefail
+          apm --version | grep -Eq 'version 0\.31\.0([ (]|$)'
+          apm audit --file .apm/skills/intake/SKILL.md
+          apm audit --file .apm/skills/plan-to-spec/SKILL.md
+          apm audit --file .apm/skills/code-review/SKILL.md
+          apm pack --offline --format agent-plugin --archive --archive-format zip --output ../release
+      - name: Inspect the actual archive and checksum it
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          version="${RELEASE_TAG#v}"
+          file="caldova-workshop-skills-$version.zip"
+          node scripts/verify-package.mjs ".workshop/release/$file" "$version"
+          cd .workshop/release
+          sha256sum "$file" > "$file.sha256"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: caldova-plugin-${{ github.run_id }}
+          path: |
+            .workshop/release/*.zip
+            .workshop/release/*.zip.sha256
+          include-hidden-files: true
+          if-no-files-found: error
+
+  draft-release:
+    needs: package
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: caldova-plugin-${{ github.run_id }}
+          path: release-files
+      - name: Create a draft for human review
+        working-directory: release-files
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          file="caldova-workshop-skills-${RELEASE_TAG#v}.zip"
+          sha256sum --check "$file.sha256"
+          gh release create "$RELEASE_TAG" "$file" "$file.sha256" \
+            --verify-tag --draft --title "$RELEASE_TAG" \
+            --notes "Three learner-authored workshop skills from source $SOURCE_SHA. Verify the package, checksum, and candidate before a human publishes this draft. This does not deploy the website."
