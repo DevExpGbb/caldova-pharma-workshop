@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageName, skillNames, stableVersion, validateSkill } from './package.mjs';
+import { packageName, skillNames, stableVersion, validateSkill, validateLock } from './package.mjs';
 
 function run(command, args, env = process.env) {
   const result = spawnSync(command, args, { encoding: 'utf8', env, maxBuffer: 2 * 1024 * 1024 });
@@ -57,9 +57,7 @@ export function verifyEntries(entries, version) {
       || Object.keys(mcp).some((key) => !['$schema', 'mcpServers'].includes(key))) {
     throw new Error('Workshop package must have empty MCP configuration.');
   }
-  if (!/^\s+format: agent-plugin\s*$/m.test(content('apm.lock.yaml'))) {
-    throw new Error('Embedded APM lock must record the agent-plugin format.');
-  }
+  validateLock(content('apm.lock.yaml'), { packed: true });
   for (const name of skillNames) validateSkill(content(`skills/${name}/SKILL.md`), name);
   return { name: packageName, version, files: actual };
 }

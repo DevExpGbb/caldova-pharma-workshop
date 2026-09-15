@@ -42,6 +42,8 @@ are **three different outcomes**.
    tool to `.workshop/extracted`. Its root should be
    `.workshop/extracted/caldova-workshop-skills-0.1.0/`, containing root
    `plugin.json`, empty `mcp.json`, lock, and the three `skills/` folders.
+   The lock retains development provenance, but the public baseline's
+   instructions/agents are not part of this installable runtime snapshot.
 
    After verifying that path and inventory, this **cross-platform** command
    copies the generated portable plugin and refuses an existing destination:

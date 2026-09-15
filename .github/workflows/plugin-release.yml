@@ -51,7 +51,7 @@ jobs:
           apm audit --file .apm/skills/intake/SKILL.md
           apm audit --file .apm/skills/plan-to-spec/SKILL.md
           apm audit --file .apm/skills/code-review/SKILL.md
-          apm pack --format agent-plugin --archive --archive-format zip --output ../release
+          apm pack --offline --format agent-plugin --archive --archive-format zip --output ../release
       - name: Inspect the actual archive and checksum it
         env:
           RELEASE_TAG: ${{ github.ref_name }}

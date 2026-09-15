@@ -10,6 +10,10 @@ best answers. Never copy them into the participant starter's `.github/skills`.
 For a facilitator packaging rehearsal, copy them into a disposable directory
 outside skill discovery, naming each copied entrypoint `SKILL.md` only inside
 that scratch package. Remove the scratch directory afterward.
+Use the source manifest's exact public development pin and ordinary policy-active
+`apm lock`, not `apm install`. The lock-only operation must deploy no baseline
+instructions/agents. Keep its development/provenance metadata when verifying the
+six-file export; the development input's content must remain outside the archive.
 
 [evals.json](evals.json) has three content comparisons and twenty trigger
 queries per skill, with a fixed balanced 60/40 training/validation split.

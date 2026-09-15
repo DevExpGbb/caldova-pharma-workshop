@@ -11,12 +11,10 @@
   `agent-package/apm.yml.example`. No active source manifest is assumed.
 - **Output:** a verified `caldova-workshop-skills-0.1.0.zip`.
 
-**Rehearsal caveat:** the positive real APM route is **NOT REHEARSED** for this
-workshop build because mandatory-package policy stopped the rehearsal **at
-`apm lock`, before a lockfile was produced**. Structural unit fixtures are
-not a successful APM pack. Read the
-[evidence status and authorized recovery](../capabilities.md#package-rehearsal-status)
-before starting; app checks remain independent.
+**Rehearsal status:** real policy-active locking and portable export succeeded
+with the exact development dependency below. No policy was changed or bypassed.
+Read the [evidence and account limits](../capabilities.md#package-rehearsal-status)
+before starting; your organization's policy may differ. App checks remain independent.
 
 ## Why
 
@@ -31,8 +29,9 @@ source**, **generated staging**, and **release output**.
    None of these is the website's version.
 
    Use the [official released APM reference](https://github.com/microsoft/apm/blob/8fd10ac5eafee7ca77d41cc34ba139d812fdacd5/packages/apm-guide/.apm/skills/apm-usage/package-authoring.md),
-   not a preinstalled authoring plugin. No Python or runtime dependency is
-   required for the native binary used here.
+   not a preinstalled authoring plugin. No Python is required for the native
+   binary. The three exported skills have no external runtime dependency;
+   package authoring has one explicit development dependency.
 
 2. **Acquire the pinned native APM binary, if needed.** If your approved
    installation already reports `0.31.0` with `apm --version`, continue to
@@ -126,10 +125,15 @@ source**, **generated staging**, and **release output**.
    ```
 
    Open `agent-package/apm.yml`. Check package identity
-   `caldova-workshop-skills`, quoted version `"0.1.0"`, `dependencies: {}`,
-   and these exact includes:
+   `caldova-workshop-skills`, quoted version `"0.1.0"`, and this exact boundary:
 
    ```yaml
+   dependencies: {}
+   devDependencies:
+     apm:
+       - devexpgbb/zava-agent-config/plugins/secure-baseline#931cfb58663154415f8a13e14680f548114d4555
+   compilation:
+     source_attribution: true
    includes:
      - .apm/skills/intake/SKILL.md
      - .apm/skills/plan-to-spec/SKILL.md
@@ -139,6 +143,16 @@ source**, **generated staging**, and **release output**.
    These are **staging paths**. Keep editing your canonical source under
    `.github/skills`, not a second `.apm/skills` master tree. The source
    manifest is deliberately under `agent-package`, not the repository root.
+
+   **Development is not runtime.** The pinned public
+   [secure-baseline manifest](https://github.com/DevExpGbb/zava-agent-config/blob/931cfb58663154415f8a13e14680f548114d4555/plugins/secure-baseline/apm.yml)
+   declares MIT and no transitive dependencies. It satisfies the package
+   requirement observed in the workshop's organization without weakening it.
+   APM resolves it during locking but excludes development dependency content
+   from portable export. Keep its full commit pin and source attribution.
+   This is not a fourth learner skill or a prepared skill installed in the App.
+   Do not run `apm install` on this authoring manifest: that is a different,
+   target-deploying operation and would contaminate the learning environment.
 
 4. **Stage, create the lock, and remember it.** Run each command in order and
    stop on any failure. **Cross-platform:**
@@ -155,8 +169,11 @@ source**, **generated staging**, and **release output**.
    `stage` validates all three authored skills and copies only the explicit
    allowlist into `.workshop/package`. `apm lock` creates the resolution record
    there. `remember-lock` saves it as `agent-package/apm.lock.yaml` for source
-   control. This local-only manifest declares no guide/plugin dependencies,
-   but organization policy still applies and can block the operation.
+   control. Locking downloads/resolves the pinned development input and
+   records its commit, content hash, declared license, and `is_dev: true`.
+   It does not deploy instructions, agents or skills to `.github` or `.agents`.
+   Keep this provenance; do not delete the dev record to make the lock look empty.
+   Production `dependencies: {}` stays empty. Organization policy still applies.
    A generated staging directory does not remove inherited repository or
    organization policy. If `apm lock` is blocked, stop here and use the
    policy recovery below; do not continue to `remember-lock` or packing.
@@ -171,7 +188,7 @@ source**, **generated staging**, and **release output**.
    ```sh
    node scripts/package.mjs stage
    cd .workshop/package
-   apm pack --format agent-plugin --archive --archive-format zip --output ../release
+   apm pack --offline --format agent-plugin --archive --archive-format zip --output ../release
    cd ../..
    node scripts/verify-package.mjs .workshop/release/caldova-workshop-skills-0.1.0.zip 0.1.0
    ```
@@ -179,6 +196,10 @@ source**, **generated staging**, and **release output**.
    Use **`--format agent-plugin`**. `--format plugin` and bare `apm pack`
    are legacy-format choices. `--target` does not isolate source content,
    and `--output` changes the destination, not the input root.
+   This export reuses the saved lock and local three-skill sources; it was
+   rehearsed without `apm_modules` in staging. It is not a new policy approval
+   or a substitute for the policy-active lock step. Do not use offline flags
+   to get around a failed lock.
 
 6. **Inspect what you would distribute.** Open the verified ZIP using your
    operating system's archive viewer. Its entire file inventory is:
@@ -196,7 +217,11 @@ source**, **generated staging**, and **release output**.
    Root `plugin.json` selects
    `https://agent-plugins.org/schemas/1.0.0/plugin.schema.json` and identifies
    package `0.1.0`. Root `mcp.json` contains an empty `mcpServers` object;
-   it grants no WorkIQ access. `apm.lock.yaml` records package integrity.
+   it grants no WorkIQ access. `apm.lock.yaml` records package integrity and
+   retains the pinned baseline's **development provenance**, not its content.
+   Confirm `is_dev: true`, the exact commit, content hash and declared MIT
+   license, plus `deployments: []`. No baseline instructions or agents appear
+   in the runtime inventory.
    No tests, fixtures, instructor answers, authoring adapter, course docs,
    or MCP credentials belong in this archive.
 
@@ -214,6 +239,7 @@ source**, **generated staging**, and **release output**.
 
 - APM reports `0.31.0`; any downloaded binary passed the pinned hash check.
 - Your source manifest and saved lock exist.
+- The saved and embedded lock retain the exact development pin and no deployments.
 - Real portable packing and the repository verifier both succeeded.
 - The archive contains exactly your three skills and the three metadata files.
 - Generated staging/output are not an editable master or intended Git content.
@@ -231,9 +257,14 @@ source**, **generated staging**, and **release output**.
   template copy may have different applicable policy, but this is not
   guaranteed and does not authorize bypassing an existing restriction.
   Keep the package checkpoint pending until the authorized path works;
-  do not add unrelated required packages to this three-skill portable bundle
-  without reconciling its scope. Do not publish private policy configuration
+  the provided pinned development input is the only approved external input.
+  Do not move it into production dependencies or add unrelated components
+  without reconciling scope. Do not publish private policy configuration
   or sensitive diagnostic details.
+- **Development-lock mismatch:** use the pinned APM version and source manifest,
+  then restage and run ordinary `apm lock`. The helpers intentionally accept
+  only the fixed APM 0.31.0 development-lock contract (including its content
+  hash), not arbitrary YAML/dependency graphs. Do not hand-edit generated metadata.
 - **Wrong directory/version/format:** check `process.cwd()`, source manifest,
   `apm --version`, and the exact command. Correct source and restage.
 - **Unexpected resource:** do not silently drop it or relax the verifier.

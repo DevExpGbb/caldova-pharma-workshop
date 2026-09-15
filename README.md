@@ -81,6 +81,9 @@ cloud code review. Check AI-credit budgets and applicable App/review policies.
 The App itself supports more access options, but those do not necessarily
 include cloud review. APM **0.31.0** is introduced only after you author skills;
 its native binary needs no Python.
+The later packaging lab resolves one pinned public **development dependency**
+with `apm lock`; that lock-only path does not install its guidance into the App
+or export it as runtime content.
 
 **Facilitator / administrators:** preflight App builds, review eligibility and
 Actions resources, and arrange the authorized WorkIQ training account, billing,

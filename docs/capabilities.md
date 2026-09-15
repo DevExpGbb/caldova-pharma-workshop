@@ -22,6 +22,7 @@ support can change. Rehearse with the actual participant account and build.
 | Cloud MCP | Configured in GitHub repository settings; tools only; no OAuth-authenticated remote MCP; CCR requires read-only hints [10] | Local App WorkIQ config and login are **not inherited**. Do not configure WorkIQ for CCR. Use public issue/spec/code context. |
 | Portable package | Agent Plugins 1.0 root schema and fixed `skills/` layout [11] | Package only the three authored skills, empty MCP configuration, and lock/identity metadata. Format support is not enterprise authority. |
 | APM | Released CLI **0.31.0**, native downloads; explicit portable export [12] | Verify archive SHA-256 before executing, then `apm --version`. Linux binaries need glibc ≥2.35. Windows ARM uses x64 emulation; no native ARM asset in this release. |
+| Development dependency | APM distinguishes `devDependencies` from production inputs; portable export excludes development content [17] | One fixed public baseline satisfies the observed package policy at lock time. `apm lock` does not deploy targets. Preserve its dev/provenance lock record; do not install it as learner guidance. |
 | Native plugin installation | App Customize → Plugins; CLI native marketplace/plugin commands [2][13] | Use a clean approved consumer only after authoring. APM's separate live registration path documents CLI 1.0.81+ [12]; don't infer an App minimum version from that. |
 | Managed settings | Enterprise configuration organization `.github-private` repository; default-branch `copilot/managed-settings.json`; AI controls → Agents → Configuration source [14] | Authorized training enterprise owner only. Additive proposal; explicit human confirmation; existing policy preserved. A JSON example is not an applied rollout. |
 | Plugin release | GitHub Actions can create draft releases; optional immutable-release controls [16] | Human chooses exact candidate/tag, then deliberately publishes a reviewed draft. Checksums detect changed bytes, not signer identity. No website deployment. |
@@ -95,11 +96,21 @@ dependency.
 | Package `0.1.0` | Your independently versioned skill bundle |
 | Agent Plugins schema `1.0.0` | Portable manifest format, not the package version |
 
-`apm pack --format agent-plugin --archive --archive-format zip --output ../release`
+`apm pack --offline --format agent-plugin --archive --archive-format zip --output ../release`
 is the portable export command, run from `.workshop/package`. Bare `apm pack`
 or `--format plugin` chooses the **legacy** format. `--target` is not content
-isolation. The dedicated staging directory, empty dependency mapping, and
-exact include list provide the workshop's packaging boundary.
+isolation. The dedicated staging directory, empty **production** dependency
+mapping, exact development pin, and exact includes provide the packaging boundary.
+`--offline` export reuses the saved lock; it does not override a failed policy-active lock.
+
+The development input is
+`devexpgbb/zava-agent-config/plugins/secure-baseline#931cfb58663154415f8a13e14680f548114d4555`.
+Its [public manifest](https://github.com/DevExpGbb/zava-agent-config/blob/931cfb58663154415f8a13e14680f548114d4555/plugins/secure-baseline/apm.yml)
+attributes Zava Engineering, declares MIT, and has no transitive APM dependencies.
+This authoring-time dependency is intentionally different from the original
+Caldova runtime skills. We do not copy its instructions or agents into the
+website, learner context or portable payload. `compilation.source_attribution: true`
+satisfies the observed attribution requirement; ordinary policy discovery stays active.
 
 Canonical authoring is `.github/skills`; `.workshop/package` is generated.
 The required archive shape is a top-level versioned directory, root `plugin.json` with
@@ -107,6 +118,11 @@ The required archive shape is a top-level versioned directory, root `plugin.json
 `apm.lock.yaml`, and exactly three `skills/<name>/SKILL.md` files. Optional
 resources require explicit include **and verifier** changes, not a broad copy.
 Structural validation does not prove that a skill works well.
+The helpers intentionally enforce the fixed APM 0.31.0 source-lock serialization,
+exact baseline commit/content hash, `is_dev: true`, declared MIT license, and
+empty deployments. A changed tool or dependency needs deliberate contract
+review, not hand-editing the generated lock. The full development metadata
+is retained in the archive.
 
 The course's tag-only workflow is configured to use pinned/checksummed tooling
 and create a **draft**. Ordinary starter pushes cannot trigger it, and absent learner
@@ -115,21 +131,35 @@ APM, WorkIQ, tenant login, or model calls.
 
 ### Package rehearsal status
 
-**Positive APM route: NOT REHEARSED for this workshop build.** An applicable
-mandatory-package policy stopped rehearsal **at `apm lock`, before a lockfile was produced**. No
-successful real APM lock → pack rehearsal is claimed. No policy bypass or
-unrelated dependency was used.
+**Positive APM route: REHEARSED on 2026-09-15, macOS Apple Silicon.**
+The initial empty-development manifest was blocked by a required-package policy.
+The corrected exact development pin passed ordinary `apm lock` with the
+available organization policy reporting `enforcement=block`; no policy was
+changed, skipped or weakened.
 
-Tool-download/checksum verification and package unit tests using structural
-fixtures are separate evidence: neither demonstrates a real APM-produced
-archive. The app and normal CI remain independent of APM and WorkIQ.
+The checksum-verified APM 0.31.0 binary produced a real six-file portable ZIP.
+All three skill entrypoints matched the original inert instructor examples
+byte-for-byte. The embedded lock retained the exact commit, `is_dev: true`,
+declared MIT license, content hash and `deployments: []`; no baseline target
+guidance was deployed or exported.
+
+Export from a fresh staging directory containing only the manifest, saved lock
+and original `.apm/skills` also passed with `--offline`, without an
+`apm_modules` project cache. Its archive was byte-identical:
+`622022f52b1ae89de7685780b0bb2a74545658613b9675ea8be03a39feee513a` (SHA-256).
+This is an instructor-sample artifact, not a learner release or behavioral
+skill evaluation. Generated sample sources stay out of the published starter.
+
+Native tag/release execution, Windows packaging, client installation, live
+WorkIQ, cloud-review comparisons and managed activation remain unrun here.
+The app and normal CI remain independent of APM and WorkIQ.
 
 Organization-owned copies may inherit mandatory package policies. If blocked,
 stop and contact the facilitator or authorized administrator. Follow the
 designed genuine personal template-copy route only where authorized; its
 applicable policy may differ, but permission and packaging success are not
 guaranteed. See [Lab 10 recovery](labs/10-package-skills.md#recovery) and the
-[facilitator guide](facilitator.md) for preflight and the pending live rehearsal.
+[facilitator guide](facilitator.md) for per-account preflight and remaining live gates.
 
 ## Inspiration, not copied solutions
 
@@ -140,6 +170,8 @@ versioned distribution. Caldova's fiction and course text are original.
 Public visibility is **not** blanket permission to copy those repositories;
 check the license of any material before reusing it. Their older packaging
 examples are not the authority for this course's portable export.
+The separately declared public development baseline above is resolved only
+as a pinned authoring input; its guidance is not reproduced in the course or runtime bundle.
 
 ## Public sources
 
@@ -159,6 +191,7 @@ examples are not the authority for this course's portable export.
 [14]: https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started
 [15]: https://github.com/github/docs/blob/6fad246e0589a100c44f00c82aa99826655165a9/content/copilot/reference/enterprise-administrators/enterprise-managed-settings.md
 [16]: https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases
+[17]: https://github.com/microsoft/apm/blob/8fd10ac5eafee7ca77d41cc34ba139d812fdacd5/docs/src/content/docs/reference/manifest-schema.md
 
 - [App access and policies](https://docs.github.com/en/copilot/concepts/agents/github-copilot-app)
 - [Cloud review availability, billing, and defaults](https://docs.github.com/en/copilot/concepts/agents/code-review)

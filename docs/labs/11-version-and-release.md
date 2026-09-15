@@ -32,6 +32,9 @@ deployment.
    - Required authored skills, source manifest and committed lock.
    - Pinned/checksum-verified APM **0.31.0**, explicit portable pack and exact
      allowlist/version validation.
+   - Exact pinned development-lock provenance, with no deployed baseline
+     targets. Export reuses that committed lock offline; it does not resolve
+     a floating dependency or require a runner's previous package cache.
    - The separate job that creates a **draft GitHub Release** with archive
      and checksum; human publication remains separate.
 
@@ -40,7 +43,9 @@ deployment.
    without the learner-authored prerequisites must fail.
 
 2. **Review and commit the package sources.** Inspect your manifest, lock,
-   and three skills. Keep the package version **0.1.0** for this first example.
+   and three skills. Check the development pin, `is_dev: true`, content hash,
+   declared license and empty deployments; keep that metadata intact.
+   Keep the package version **0.1.0** for this first example.
    A future change to these skills might warrant **0.1.1**; that does not
    require changing the app's version, APM tool version, or schema version.
 

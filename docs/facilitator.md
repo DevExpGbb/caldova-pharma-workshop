@@ -102,10 +102,12 @@ Template copies do not establish that upstream settings, issues, budgets or rule
 WorkIQ access is a pre-enabled training dependency that may carry separate charges or licenses; this workshop does not provision it.
 If access is missing, contact the responsible admin outside the teaching block or choose offline practice.
 
-**APM preparation caveat:** the pinned binary was verified, but this organization-owned checkout inherited
-a mandatory-package policy that stopped the real rehearsal at `apm lock`. Actual successful portable packaging
-is **NOT REHEARSED** here. Structural package tests are not a substitute. Rehearse the designed genuine personal
-template-copy route where authorized; do not move organization-owned work or change policy to evade a restriction.
+**APM preparation evidence:** the initial empty-development manifest was policy-blocked. The corrected
+manifest resolves the exact pinned public baseline as a development dependency with policy active.
+Real lock and six-file portable export passed on macOS; offline export without a project dependency cache
+matched byte-for-byte. No baseline guidance was deployed or exported; its dev/provenance lock record stays intact.
+See the [dated evidence and remaining limits](capabilities.md#package-rehearsal-status).
+Rehearse the designed personal template-copy route with each account's actual policy; never move work or change policy to evade a restriction.
 The website and ordinary app CI do not depend on APM.
 
 ## At the start of the room
@@ -220,6 +222,9 @@ Local WorkIQ sign-in and installed plugins do not automatically transfer to clou
 Install APM using the approved instructions for the learner's OS; verify `apm --version` reports **0.31.0**.
 Do not overwrite a package-manager-owned install with a standalone installer or bypass checksum failures.
 Use one dedicated package directory with an explicit allowlist of the three authored skill files and `dependencies: {}`.
+Keep the example's one immutable `devDependencies.apm` pin and `compilation.source_attribution: true`.
+Explain that this public development input is resolved during locking, not installed as App guidance
+or exported as a fourth skill. Its manifest declares MIT and no transitive dependencies.
 Keep one canonical editable source for each skill; inspect any deliberate copy into the package for drift.
 Do not include fixtures, answer references, instructions, tools, credentials or WorkIQ configuration.
 
@@ -233,7 +238,7 @@ apm lock
 cd ../..
 node scripts/package.mjs remember-lock
 cd .workshop/package
-apm pack --format agent-plugin --archive --archive-format zip --output ../release
+apm pack --offline --format agent-plugin --archive --archive-format zip --output ../release
 cd ../..
 node scripts/verify-package.mjs .workshop/release/caldova-workshop-skills-0.1.0.zip 0.1.0
 ```
@@ -244,6 +249,9 @@ When a skill or manifest changes, stage and lock again before remembering the ne
 Extra skill resources fail explicitly: deliberately extend both source and archive allowlists if the group chooses to include one.
 If APM reports an organization-policy block, contact the responsible admin about the authorized training scope.
 Do not use bypass flags, weaken policy, move work to evade a restriction or add an unrelated package to this teaching bundle.
+Do not replace the lock-only path with `apm install`: installing the authoring manifest would deploy development guidance.
+The saved lock must retain the exact pin, content hash, declared license, `is_dev: true`, and empty deployments.
+Offline export reuses that reviewed lock; it is not a new policy approval or a way around a failed lock.
 
 Do not use bare `apm pack` or `--format plugin` as synonyms for Agent Plugins 1.0.
 `--target` is not a source-folder filter; `-o` changes output, not the input package.

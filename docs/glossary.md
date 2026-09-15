@@ -52,6 +52,8 @@ These definitions describe this small, fictional-data workshop, not a production
 
 20. **Lockfile** — A recorded resolution of package inputs, named `apm.lock.yaml` for APM. It helps make repeated packaging predictable; the packed lockfile also records integrity information. A lockfile is not a clinical validation, security approval or digital signature.
 
+**Development dependency versus runtime content** — A development dependency supports authoring or build-time requirements. This workshop locks one pinned public baseline without deploying its guidance; portable export excludes that content but preserves its provenance. The runtime plugin still contains only the three learner-authored skills and metadata.
+
 21. **Format version and package version** — **Agent Plugins 1.0** names the portable format; its schema URL contains `1.0.0`. Your package might independently be version `0.1.0`, while APM is `0.31.0`. Changing your package number does not change the format. The explicit APM format name is `agent-plugin`, not the legacy alias `plugin`.
 
 22. **Git tag and GitHub release** — A tag names a point in Git history. A release adds a description and downloadable assets, such as your plugin ZIP. A draft release awaits a human's publication decision. Tags and checksums alone do not guarantee immutability; the repository's release setting and publication process matter.

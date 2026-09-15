@@ -9,6 +9,38 @@ export const skillNames = ['intake', 'plan-to-spec', 'code-review'];
 export const packageName = 'caldova-workshop-skills';
 export const stableVersion = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const template = readFileSync(new URL('../agent-package/apm.yml.example', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
+// Exact APM 0.31.0 lock contract for the single pinned development input.
+const developmentLock = `lockfile_version: '1'
+apm_version: 0.31.0
+dependencies:
+- repo_url: devexpgbb/zava-agent-config
+  name: secure-baseline
+  host: github.com
+  resolved_commit: 931cfb58663154415f8a13e14680f548114d4555
+  resolved_ref: 931cfb58663154415f8a13e14680f548114d4555
+  version: 6.2.0
+  virtual_path: plugins/secure-baseline
+  is_virtual: true
+  package_type: apm_package
+  content_hash: sha256:e82eba0cc254ca707293b8241f1450956ba859c083e0b1c6c7149e8859ac97aa
+  is_dev: true
+  declared_license: MIT
+deployments: []
+`;
+
+export function validateLock(text, { packed = false } = {}) {
+  let normalized = text.replaceAll('\r\n', '\n');
+  if (packed) {
+    const header = normalized.match(/^pack:\n(?: {2,}[^\n]*\n)+/)?.[0];
+    if (!header || !/^  format: agent-plugin$/m.test(header)) {
+      throw new Error('Embedded development lock must record the agent-plugin format.');
+    }
+    normalized = normalized.slice(header.length);
+  }
+  if (normalized !== developmentLock) {
+    throw new Error('Unexpected development lock. Use APM 0.31.0 and the exact pinned dev dependency; regenerate with ordinary apm lock. Do not edit or discard provenance.');
+  }
+}
 
 export function readVersion(manifest) {
   const normalized = manifest.replaceAll('\r\n', '\n');
@@ -91,7 +123,10 @@ export function stagePackage(root = process.cwd(), releaseTag) {
   if (releaseTag !== undefined && !lockEntry) {
     throw new Error('Release requires committed agent-package/apm.lock.yaml. Run apm lock in staging and remember-lock first.');
   }
-  if (lockEntry) requireRegularFile(root, 'agent-package/apm.lock.yaml');
+  if (lockEntry) {
+    requireRegularFile(root, 'agent-package/apm.lock.yaml');
+    validateLock(readFileSync(lockPath, 'utf8'));
+  }
   const scratch = safeScratch(root);
   const stage = path.join(scratch, 'package');
   if (lstatSync(stage, { throwIfNoEntry: false })?.isSymbolicLink()) throw new Error('Refusing symlinked package staging directory.');
@@ -123,6 +158,7 @@ export function rememberLock(root = process.cwd()) {
     }
   }
   const lock = requireRegularFile(root, '.workshop/package/apm.lock.yaml');
+  validateLock(readFileSync(lock, 'utf8'));
   const destination = path.join(root, 'agent-package/apm.lock.yaml');
   if (lstatSync(destination, { throwIfNoEntry: false })) requireRegularFile(root, 'agent-package/apm.lock.yaml');
   copyFileSync(lock, destination);
