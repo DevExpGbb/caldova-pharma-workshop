@@ -1,0 +1,10 @@
+name: caldova-workshop-skills
+version: "0.1.0"
+description: Three skills authored during the Caldova Pharma workshop
+author: Caldova Pharma workshop contributors
+license: MIT
+dependencies: {}
+includes:
+  - .apm/skills/intake/SKILL.md
+  - .apm/skills/plan-to-spec/SKILL.md
+  - .apm/skills/code-review/SKILL.md

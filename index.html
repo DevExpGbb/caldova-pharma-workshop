@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A fictional local lab document board for the Caldova Pharma coding workshop." />
+    <meta name="theme-color" content="#173e36" />
+    <title>Lab document board | Caldova Pharma</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#documents">Skip to documents</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Caldova Pharma home">
+        <span class="brand-mark" aria-hidden="true">c.</span>
+        <span>Caldova <strong>Pharma</strong></span>
+      </a>
+      <span class="environment"><span aria-hidden="true"></span>Local workshop</span>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">A little clarity for the everyday</p>
+          <h1 id="page-title">Lab document<br />board<span class="title-dot">.</span></h1>
+          <p class="lede">One shared place for the guides, checklists, and handouts that help a fictional team stay organized.</p>
+        </div>
+        <aside class="training-note" aria-labelledby="training-title">
+          <span class="note-icon" aria-hidden="true">i</span>
+          <h2 id="training-title">Made for learning</h2>
+          <p>Every document and team here is fictional training data. Labels describe editorial status only.</p>
+          <p>This is not a validated quality-management system or a tool for medical, laboratory, or approval decisions.</p>
+        </aside>
+      </section>
+      <section id="documents" class="documents" aria-labelledby="documents-title" tabindex="-1">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">The collection</p>
+            <h2 id="documents-title">All documents</h2>
+          </div>
+          <p id="document-count" class="document-count" aria-live="polite"></p>
+        </div>
+        <ul id="document-list" class="document-list" aria-label="Lab documents"></ul>
+        <noscript><p class="noscript">Enable JavaScript to display the six fictional document records.</p></noscript>
+      </section>
+    </main>
+    <footer>
+      <p><strong>Small steps. Useful skills.</strong> A hands-on coding workshop.</p>
+      <p>Fictional data &middot; Local only &middot; No sign-in</p>
+    </footer>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

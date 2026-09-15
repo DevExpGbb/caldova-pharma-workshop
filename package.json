@@ -1,0 +1,23 @@
+{
+  "name": "caldova-pharma-workshop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "An original, fictional local document board for a beginner Copilot workshop.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24.21.0 <25"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5173 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
+    "test": "node --test",
+    "check:docs": "node scripts/check-workshop.mjs",
+    "check": "npm test && npm run build && npm run check:docs",
+    "package:stage": "node scripts/package.mjs stage"
+  },
+  "devDependencies": {
+    "vite": "7.3.6"
+  }
+}

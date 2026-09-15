@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.workshop/
+apm_modules/
+.DS_Store
+.env
+.env.*
+*.log
